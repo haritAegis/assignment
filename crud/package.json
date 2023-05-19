@@ -1,0 +1,8 @@
+{
+  "scripts": {
+    "dev": "nodemon sam local start-api"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.22"
+  }
+}
