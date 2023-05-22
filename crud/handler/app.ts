@@ -1,36 +1,51 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
 import mysql2 from 'mysql2';
 import dotenv from 'dotenv';
+import { User } from './models/User';
 
-dotenv.config({path: '../config.env'});
+// configure env vars from a custom file
+dotenv.config({ path: '../config.env' });
 
-const sql = mysql2.createConnection({
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB
-    
-}).promise();
+// create connection with railway db
+export const pool = mysql2
+    .createConnection({
+        host: 'containers-us-west-176.railway.app',
+        user: 'root',
+        password: 'i85YT05CO2o1VTYajMGZ',
+        database: 'railway',
+    })
+    .promise();
 
-export const lambdaHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
+export const DBHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
+    // create new instance of the User entity'
     try {
-        if(sql){
-            return {
-                statusCode: 200,
-                body: JSON.stringify({
-                    message: 'App init successfully and connected with db',
-                }),
-            };
-        }
+        const user = new User('Harit', 'Joshi', 'password');
 
-        else throw new Error('Failed to initialize the app');
+        /* Internally user uses sql to do its creation of table but
+           the problem is that its not working not able to create User
+           table. 
+           
+           Refer to the User & Entity class for more info!
+        
+        */
 
-    } catch (err) {
-        console.log(err);
+        await user.createUserTable({
+            firstname: 'TEXT',
+            lastname: 'TEXT',
+            password: 'TEXT'
+        });
+        
+        return {
+            statusCode: 200,
+            body: JSON.stringify({
+                message: 'success',
+            }),
+        };
+    } catch (e) {
         return {
             statusCode: 500,
             body: JSON.stringify({
-                message: 'some error happened',
+                message: 'failed',
             }),
         };
     }
