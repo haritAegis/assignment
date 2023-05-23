@@ -31,6 +31,14 @@ export class UserModel extends Entity {
         );
     }
 
+    async delete(cond: string = ''){ 
+        await pool.query(
+            `DELETE FROM ${this.name} WHERE ${cond};`,
+        );
+
+        return true;
+    }
+
     async update(data: Partial<MySQLRecord<UserModel, string>>, cond: string = '') {
         let setStr = '';
 

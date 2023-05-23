@@ -6,6 +6,7 @@ import { insertUserHandler } from './insertUser';
 import { updateUserHandler } from './updateUser';
 import { createUserTableHandler } from './createUserTable';
 import { getUserHandler } from './getUser';
+import { deleteUserHandler } from './deleteUser';
 
 // configure env vars from a custom file
 dotenv.config({ path: '../config.env' });
@@ -41,6 +42,9 @@ export const APIHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewa
 
         case 'GET /get-user':
             return getUserHandler(event);
+
+        case 'DELETE /delete-user':
+            return deleteUserHandler(event);
 
         default:
             return {
