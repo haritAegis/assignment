@@ -1,7 +1,7 @@
 
 // All MySQL Datatypes
 
-type MySQLTypes =
+export type MySQLTypes =
   | "CHAR"
   | "VARCHAR"
   | "BINARY"
@@ -39,8 +39,19 @@ type MySQLTypes =
 
 // type key<T> = keyof T;
 
-type keys<T, U> = {
-  [K in keyof T]: T[K] extends U ? never : K;
+type keys<T> = {
+  [K in keyof T]: T[K] extends Function ? never : K;
 }[keyof T];
 
-export type MySQLRecord<T = unknown> = Record<keys<T, Function>, MySQLTypes>;
+export type MySQLRecord<T, U = string> = Record<keys<T>, U>;
+
+// type ValuesAsStringArray<T> = {
+//   [K in keyof T]: T[K] extends string[] ? T[K][number] : never;
+// };
+
+// type ExtractAttributeValues<T> = ValuesAsStringArray<T>[keyof T & 'attributes'];
+
+// export type MySQLRecord<T> = {
+//   [K in ExtractAttributeValues<T> & string]: MySQLTypes;
+// };
+
