@@ -22,7 +22,7 @@ export const user = new UserModel('Users');
 export const DBHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
     // create new instance of the User entity'
     try {
-        
+
         await user.createUserTable({
             firstname: 'TEXT',
             lastname: 'TEXT',
@@ -36,6 +36,9 @@ export const DBHandler = async (event: APIGatewayProxyEvent): Promise<APIGateway
             }),
         };
     } catch (e) {
+
+        console.log((e as Error).message);
+        
         return {
             statusCode: 500,
             body: JSON.stringify({

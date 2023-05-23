@@ -1,17 +1,18 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
 import { user } from './app';
+import { MySQLRecord } from './models/types';
+import { UserModel } from './models/User';
 
 export const insertUserHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
     // create user
-    console.log(event.body);
-    
+    const data = JSON.parse(event.body!) as MySQLRecord<UserModel, string>;
+
     try {
-        // await user.insert({
-        //     firstname: 'Harit',
-        //     lastname: 'Joshi',
-        //     password: '1234'
-        // });
-        
+        if (!data.firstname || !data.lastname || !data.password)
+            throw new Error('Either firstname, lastname or password is missing');
+            
+        await user.insert({ ...data });
+
         return {
             statusCode: 200,
             body: JSON.stringify({
@@ -19,6 +20,8 @@ export const insertUserHandler = async (event: APIGatewayProxyEvent): Promise<AP
             }),
         };
     } catch (e) {
+        console.log(e);
+
         return {
             statusCode: 500,
             body: JSON.stringify({
