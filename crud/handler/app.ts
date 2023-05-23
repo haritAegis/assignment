@@ -2,6 +2,10 @@ import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
 import mysql2 from 'mysql2';
 import dotenv from 'dotenv';
 import { UserModel } from './models/User';
+import { insertUserHandler } from './insertUser';
+import { updateUserHandler } from './updateUser';
+import { createUserTableHandler } from './createUserTable';
+import { getUserHandler } from './getUser';
 
 // configure env vars from a custom file
 dotenv.config({ path: '../config.env' });
@@ -19,31 +23,32 @@ export const pool = mysql2
 
 export const user = new UserModel('Users');
 
-export const DBHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
+export const APIHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
     // create new instance of the User entity'
-    try {
 
-        await user.createUserTable({
-            firstname: 'TEXT',
-            lastname: 'TEXT',
-            password: 'TEXT',
-        });
+    const route = `${event.httpMethod} ${event.path}`;
+    console.log(route);
+    
+    switch (route) {
+        case 'GET /create-user-table':
+            return createUserTableHandler(event);
 
-        return {
-            statusCode: 200,
-            body: JSON.stringify({
-                message: `success user table created`,
-            }),
-        };
-    } catch (e) {
+        case 'POST /insert-user':
+            return insertUserHandler(event);
 
-        console.log((e as Error).message);
-        
-        return {
-            statusCode: 500,
-            body: JSON.stringify({
-                message: (e as Error).message,
-            }),
-        };
+        case 'PATCH /update-user':
+            return updateUserHandler(event);
+
+        case 'GET /get-user':
+            return getUserHandler(event);
+
+        default:
+            return {
+                statusCode: 500,
+                body: JSON.stringify({
+                    message: 'Something went wrong',
+                }),
+            };
     }
+
 };

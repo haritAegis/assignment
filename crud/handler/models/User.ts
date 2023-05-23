@@ -20,14 +20,12 @@ export class UserModel extends Entity {
     }
 
     async getUser(id: string) {
-        return await pool.query(`SELECT * FROM ${this.name} WHERE id = ${id};`);
+        const [d, _] = await pool.query(`SELECT id, firstname, lastname FROM ${this.name} WHERE id = ${id};`);
+        return d;
     }
 
     async insert(data: MySQLRecord<UserModel, string>) {
         const { firstname, lastname, password } = data;
-        console.log(
-            `INSERT INTO ${this.name} (firstname, lastname, password) VALUES(${firstname}, ${lastname}, ${password});`,
-        );
         return await pool.query(
             `INSERT INTO ${this.name} (firstname, lastname, password) VALUES('${firstname}', '${lastname}', '${password}');`,
         );
@@ -38,7 +36,7 @@ export class UserModel extends Entity {
 
         Object.keys(data).forEach((key) => {
             const k = key as keyof typeof data;
-            setStr += `${k as string} = ${data[k]}, `;
+            setStr += `${k as string} = '${data[k]}', `;
         });
 
         await pool.query(`UPDATE ${this.name} SET ${setStr.slice(0, setStr.length - 2)} WHERE ${cond};`);

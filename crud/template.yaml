@@ -15,7 +15,7 @@ Resources:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
       CodeUri: handler/
-      Handler: app.DBHandler
+      Handler: app.APIHandler
       Runtime: nodejs18.x
       Architectures:
         - x86_64
@@ -23,8 +23,8 @@ Resources:
        AppInit:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
           Properties:
-            Path: /create-user-table
-            Method: get
+            Path: /{proxy+}
+            Method: ANY
 
     Metadata: # Manage esbuild properties
       BuildMethod: esbuild
@@ -34,30 +34,3 @@ Resources:
         Sourcemap: true
         EntryPoints: 
         - app.ts
-
-
-  InsertUserFunction:
-    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
-    Properties:
-      CodeUri: handler/
-      Handler: insertUser.insertUserHandler
-      Runtime: nodejs18.x
-      Architectures:
-        - x86_64
-      Events:
-        InsertUser:
-            Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
-            Properties:
-              Path: /insert-user
-              Method: post
-              
-    Metadata: # Manage esbuild properties
-      BuildMethod: esbuild
-      BuildProperties:
-        Minify: true
-        Target: "es2020"
-        Sourcemap: true
-        EntryPoints: 
-        - insertUser.ts
-
-  
