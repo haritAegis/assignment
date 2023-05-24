@@ -48,9 +48,9 @@ export const APIHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewa
 
         default:
             return {
-                statusCode: 500,
+                statusCode: 404,
                 body: JSON.stringify({
-                    message: 'Something went wrong',
+                    message: 'Route not found',
                 }),
             };
     }
