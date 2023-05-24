@@ -27,7 +27,7 @@ export class Entity {
 
     async deleteTable<T>(isSure: T extends false ? 'This will delete the entity, proceed with caution' : T) {
         if (isSure) {
-            const [res, _] = await pool.query(`DELETE TABLE ${this.name};`);
+            const [res, _] = await pool.query(`DROP TABLE ${this.name};`);
             return true;
         }
 
