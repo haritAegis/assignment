@@ -21,7 +21,7 @@ export const updateUserHandler = async (event: APIGatewayProxyEvent): Promise<AP
             }),
         };
     } catch (e) {
-
+        console.error(e);
         return {
             statusCode: 500,
             body: JSON.stringify({
