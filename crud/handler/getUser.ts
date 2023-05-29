@@ -1,6 +1,8 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
 import { user } from './app';
 
+
+// handler to get user data
 export const getUserHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
     try {
         if (!event.queryStringParameters?.id) throw new Error('Please specify user id as a query param');

@@ -2,6 +2,12 @@ import { pool } from '../app';
 import { Entity } from './Entity';
 import { MySQLRecord, MySQLTypes } from './types';
 
+/* 
+    User class which extends Entity to inherit common base sql
+    methods. This class defines schema of this entity with
+    methods specific for the given entity
+*/
+
 export class UserModel extends Entity {
     firstname: null = null;
     lastname: null = null;
@@ -20,21 +26,20 @@ export class UserModel extends Entity {
     }
 
     async getUser(id: string) {
-        const [d, _] = await pool.query(`SELECT id, firstname, lastname FROM ${this.name} WHERE id = ${id};`);
+        const [d, _] = await pool.query(`SELECT id, firstname, lastname FROM ${this.name} WHERE id = ?;`, [id]);
         return d;
     }
 
     async insert(data: MySQLRecord<UserModel, string>) {
         const { firstname, lastname, password } = data;
         return await pool.query(
-            `INSERT INTO ${this.name} (firstname, lastname, password) VALUES('${firstname}', '${lastname}', '${password}');`,
+            `INSERT INTO ${this.name} (firstname, lastname, password) VALUES(?, ?, ?);`,
+            [firstname, lastname, password]
         );
     }
 
-    async delete(cond: string = ''){ 
-        await pool.query(
-            `DELETE FROM ${this.name} WHERE ${cond};`,
-        );
+    async delete(cond: string = '') {
+        await pool.query(`DELETE FROM ${this.name} WHERE (?);`, [cond]);
 
         return true;
     }
@@ -47,6 +52,7 @@ export class UserModel extends Entity {
             setStr += `${k as string} = '${data[k]}', `;
         });
 
-        await pool.query(`UPDATE ${this.name} SET ${setStr.slice(0, setStr.length - 2)} WHERE ${cond};`);
+        const updateStr = setStr.slice(0, setStr.length - 2);
+        await pool.query(`UPDATE ${this.name} SET (?) WHERE (?);`, [updateStr, cond]);
     }
 }

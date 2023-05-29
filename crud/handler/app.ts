@@ -11,13 +11,13 @@ import { createConnection } from './connection';
 // create connection with railway db
 export const pool = createConnection();
 
+// create new instance of the User entity'
 export const user = new UserModel('Users');
 
+// Route Handler
 export const APIHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
-    // create new instance of the User entity'
 
     const route = `${event.httpMethod} ${event.path}`;
-    console.log(route);
     
     switch (route) {
         case 'GET /create-user-table':

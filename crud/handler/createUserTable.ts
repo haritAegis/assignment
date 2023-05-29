@@ -1,8 +1,9 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
 import { user } from './app';
 
+// handler to create a table called User
 export const createUserTableHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
-    // create new instance of the User entity'
+
     try {
         await user.createUserTable({
             firstname: 'TEXT',

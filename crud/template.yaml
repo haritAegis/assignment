@@ -9,6 +9,13 @@ Description: >
 Globals:
   Function:
     Timeout: 35
+    Environment:
+        Variables:
+         DB_HOST : containers-us-west-16.railway.app
+         DB_USER : root
+         DB_PASSWORD : imEbn4rZLN527YJmvqgG
+         DB : railway
+         PORT : '5973'
 
 Resources:
   AppInitFunction:
