@@ -56,8 +56,7 @@ To deploy and run the CRUD application, follow these steps:
 
 To use the CRUD application, you can send HTTP requests to the API endpoint using your preferred tool, such as cURL or Postman. Here is an example of the available API endpoints:
 
-- ## Base url = 
-https://3000-haritaegis-assignment-jhf2zsiob7t.ws-us97.gitpod.io
+- Base url: https://3000-haritaegis-assignment-jhf2zsiob7t.ws-us97.gitpod.io
 
 - `POST /insert-user`: Create a new user.
 - `GET /get-user?id`: Retrieve a specific user.

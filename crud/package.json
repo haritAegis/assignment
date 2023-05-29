@@ -1,0 +1,8 @@
+{
+  "scripts": {
+    "dev": "nodemon --exec sam build && sam local start-api --watch crud"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.22"
+  }
+}
